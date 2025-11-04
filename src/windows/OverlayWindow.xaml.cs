@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -191,6 +192,91 @@ namespace LiveCaptionsTranscriber
             OverlayCopyButton.Content = message;
             await Task.Delay(1000);
             OverlayCopyButton.Content = originalText;
+        }
+
+        // Context menu event handlers
+        private void FullTranscriptionText_ContextMenuOpening(object sender, System.Windows.Controls.ContextMenuEventArgs e)
+        {
+            var textBox = sender as System.Windows.Controls.TextBox;
+            var contextMenu = textBox?.ContextMenu;
+            
+            if (contextMenu != null)
+            {
+                // Enable/disable menu items based on selection
+                var copySelectedItem = contextMenu.Items[0] as System.Windows.Controls.MenuItem;
+                if (copySelectedItem != null)
+                {
+                    copySelectedItem.IsEnabled = !string.IsNullOrEmpty(textBox.SelectedText);
+                }
+            }
+        }
+
+        private void CopySelected_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(FullTranscriptionText.SelectedText))
+                {
+                    Clipboard.SetText(FullTranscriptionText.SelectedText);
+                    ShowOverlayMessage("Selected text copied!");
+                }
+                else
+                {
+                    ShowOverlayMessage("No text selected");
+                }
+            }
+            catch
+            {
+                ShowOverlayMessage("Copy failed");
+            }
+        }
+
+        private void CopyAll_Click(object sender, RoutedEventArgs e)
+        {
+            OverlayCopyButton_Click(sender, e); // Reuse existing copy all functionality
+        }
+
+        private void SelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                FullTranscriptionText.SelectAll();
+                ShowOverlayMessage("All text selected");
+            }
+            catch
+            {
+                ShowOverlayMessage("Select all failed");
+            }
+        }
+
+        private void FullTranscriptionText_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Handle keyboard shortcuts
+            if (e.Key == Key.C && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                // Ctrl+C - Copy selected text (or all if nothing selected)
+                if (!string.IsNullOrEmpty(FullTranscriptionText.SelectedText))
+                {
+                    CopySelected_Click(sender, e);
+                }
+                else
+                {
+                    CopyAll_Click(sender, e);
+                }
+                e.Handled = true;
+            }
+            else if (e.Key == Key.C && Keyboard.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))
+            {
+                // Ctrl+Shift+C - Copy all text
+                CopyAll_Click(sender, e);
+                e.Handled = true;
+            }
+            else if (e.Key == Key.A && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                // Ctrl+A - Select all text
+                SelectAll_Click(sender, e);
+                e.Handled = true;
+            }
         }
 
         private void FontIncrease_Click(object sender, RoutedEventArgs e)

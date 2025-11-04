@@ -43,38 +43,108 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.Resources>
-                    <Style x:Key="CaptionBlockStyle" TargetType="TextBlock">
-                        <Setter Property="TextWrapping" Value="Wrap" />
-                        <Setter Property="VerticalAlignment" Value="Stretch" />
-                    </Style>
+                    <!-- Resources for overlay window -->
                 </Grid.Resources>
 
-                <!-- Control Buttons -->
-                <StackPanel
-                    Grid.Row="0"
-                    Margin="5,5,5,0"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal"
-                    Visibility="Hidden"
-                    x:Name="OverlayControlButtons">
-                    <ui:Button
-                        x:Name="OverlayCopyButton"
-                        Content="Copy"
-                        Margin="0,0,5,0"
-                        Padding="8,4"
-                        Click="OverlayCopyButton_Click"
-                        Icon="{ui:SymbolIcon Copy16}"
-                        Background="#FFAAAAAA"
-                        FontSize="12" />
-                    <ui:Button
-                        x:Name="OverlayClearButton"
-                        Content="Clear"
-                        Padding="8,4"
-                        Click="OverlayClearButton_Click"
-                        Icon="{ui:SymbolIcon Delete16}"
-                        Background="#FFAAAAAA"
-                        FontSize="12" />
-                </StackPanel>
+                <!-- Top Control Bar -->
+                <Grid Grid.Row="0" Margin="5,5,5,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Settings Controls (Left Side) -->
+                    <StackPanel
+                        x:Name="ControlPanel"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Visibility="Hidden">
+                        <ui:Button
+                            x:Name="FontIncrease"
+                            Background="#FFAAAAAA"
+                            Click="FontIncrease_Click"
+                            Cursor="Hand"
+                            Icon="{ui:SymbolIcon fontIncrease20, Filled=False}"
+                            ToolTip="Font Increase"
+                            Margin="0,0,2,0" />
+                        <ui:Button
+                            x:Name="FontDecrease"
+                            Background="#FFAAAAAA"
+                            Click="FontDecrease_Click"
+                            Cursor="Hand"
+                            Icon="{ui:SymbolIcon fontDecrease20, Filled=False}"
+                            ToolTip="Font Decrease"
+                            Margin="0,0,2,0" />
+                        <ui:Button
+                            x:Name="FontColorCycle"
+                            Background="#FFAAAAAA"
+                            Click="FontColorCycle_Click"
+                            Cursor="Hand"
+                            Icon="{ui:SymbolIcon color16, Filled=False}"
+                            ToolTip="Font Color"
+                            Margin="0,0,5,0" />
+                        <ui:Button
+                            x:Name="OpacityIncrease"
+                            Background="#FFAAAAAA"
+                            Click="OpacityIncrease_Click"
+                            Cursor="Hand"
+                            Icon="{ui:SymbolIcon arrowAutofitUp20, Filled=False}"
+                            ToolTip="Opacity Increase"
+                            Margin="0,0,2,0" />
+                        <ui:Button
+                            x:Name="OpacityDecrease"
+                            Background="#FFAAAAAA"
+                            Click="OpacityDecrease_Click"
+                            Cursor="Hand"
+                            Icon="{ui:SymbolIcon arrowAutofitDown20, Filled=False}"
+                            ToolTip="Opacity Decrease"
+                            Margin="0,0,2,0" />
+                        <ui:Button
+                            x:Name="BackgroundColorCycle"
+                            Background="#FFAAAAAA"
+                            Click="BackgroundColorCycle_Click"
+                            Cursor="Hand"
+                            Icon="{ui:SymbolIcon color16, Filled=False}"
+                            ToolTip="Background Color"
+                            Margin="0,0,5,0" />
+                        <ui:Button
+                            x:Name="ClickThrough"
+                            Background="#FFAAAAAA"
+                            Click="ClickThrough_Click"
+                            Cursor="Hand"
+                            Icon="{ui:SymbolIcon lockClosed16, Filled=False}"
+                            ToolTip="Click Through" />
+                    </StackPanel>
+                    
+                    <!-- Copy/Clear Buttons (Right Side) -->
+                    <StackPanel
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Visibility="Hidden"
+                        x:Name="OverlayControlButtons">
+                        <ui:Button
+                            x:Name="OverlayCopyButton"
+                            Content="Copy"
+                            Margin="0,0,5,0"
+                            Padding="8,4"
+                            Click="OverlayCopyButton_Click"
+                            Icon="{ui:SymbolIcon Copy16}"
+                            Background="#FFAAAAAA"
+                            FontSize="12" />
+                        <ui:Button
+                            x:Name="OverlayClearButton"
+                            Content="Clear"
+                            Padding="8,4"
+                            Click="OverlayClearButton_Click"
+                            Icon="{ui:SymbolIcon Delete16}"
+                            Background="#FFAAAAAA"
+                            FontSize="12" />
+                    </StackPanel>
+                </Grid>
 
                 <!-- Full Transcription Display -->
                 <ui:Card
@@ -89,91 +159,35 @@
                         x:Name="OverlayScrollViewer"
                         VerticalScrollBarVisibility="Auto"
                         HorizontalScrollBarVisibility="Disabled">
-                        <TextBlock
+                        <TextBox
                             x:Name="FullTranscriptionText"
                             FontSize="16"
                             Foreground="#FFFFFFFF"
-                            Style="{StaticResource CaptionBlockStyle}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            IsReadOnly="True"
+                            TextWrapping="Wrap"
+                            VerticalAlignment="Stretch"
                             Text="{Binding FullTranscriptionText, UpdateSourceTrigger=PropertyChanged}"
-                            LineHeight="20">
-                            <TextBlock.Effect>
-                                <DropShadowEffect
-                                    x:Name="FullTranscriptionShadow"
-                                    BlurRadius="5"
-                                    Direction="0"
-                                    ShadowDepth="0"
-                                    Color="Black" />
-                            </TextBlock.Effect>
-                        </TextBlock>
+                            VerticalScrollBarVisibility="Disabled"
+                            HorizontalScrollBarVisibility="Disabled"
+                            Cursor="IBeam"
+                            ContextMenuOpening="FullTranscriptionText_ContextMenuOpening"
+                            KeyDown="FullTranscriptionText_KeyDown">
+                            
+                            <TextBox.ContextMenu>
+                                <ContextMenu x:Name="TextContextMenu">
+                                    <MenuItem Header="Copy Selected" Click="CopySelected_Click" Icon="{ui:SymbolIcon Copy16}" InputGestureText="Ctrl+C"/>
+                                    <MenuItem Header="Copy All" Click="CopyAll_Click" Icon="{ui:SymbolIcon Copy16}" InputGestureText="Ctrl+Shift+C"/>
+                                    <Separator/>
+                                    <MenuItem Header="Select All" Click="SelectAll_Click" Icon="{ui:SymbolIcon Document16}" InputGestureText="Ctrl+A"/>
+                                </ContextMenu>
+                            </TextBox.ContextMenu>
+                        </TextBox>
                     </ScrollViewer>
                 </ui:Card>
 
-                <StackPanel
-                    x:Name="ControlPanel"
-                    Grid.Row="1"
-                    Margin="0,0,5,5"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Orientation="Horizontal">
-                    <ui:Button
-                        x:Name="FontIncrease"
-                        Background="#FFAAAAAA"
-                        Click="FontIncrease_Click"
-                        Cursor="Hand"
-                        Icon="{ui:SymbolIcon fontIncrease20,
-                                             Filled=False}"
-                        ToolTip="Font Increase" />
-                    <ui:Button
-                        x:Name="FontDecrease"
-                        Background="#FFAAAAAA"
-                        Click="FontDecrease_Click"
-                        Cursor="Hand"
-                        Icon="{ui:SymbolIcon fontDecrease20,
-                                             Filled=False}"
-                        ToolTip="Font Decrease" />
-                    <ui:Button
-                        x:Name="FontColorCycle"
-                        Background="#FFAAAAAA"
-                        Click="FontColorCycle_Click"
-                        Cursor="Hand"
-                        Icon="{ui:SymbolIcon color16,
-                                             Filled=False}"
-                        ToolTip="Font Color" />
-                    <ui:Button
-                        x:Name="OpacityIncrease"
-                        Margin="5,0,0,0"
-                        Background="#FFAAAAAA"
-                        Click="OpacityIncrease_Click"
-                        Cursor="Hand"
-                        Icon="{ui:SymbolIcon arrowAutofitUp20,
-                                             Filled=False}"
-                        ToolTip="Opacity Increase" />
-                    <ui:Button
-                        x:Name="OpacityDecrease"
-                        Background="#FFAAAAAA"
-                        Click="OpacityDecrease_Click"
-                        Cursor="Hand"
-                        Icon="{ui:SymbolIcon arrowAutofitDown20,
-                                             Filled=False}"
-                        ToolTip="Opacity Decrease" />
-                    <ui:Button
-                        x:Name="BackgroundColorCycle"
-                        Background="#FFAAAAAA"
-                        Click="BackgroundColorCycle_Click"
-                        Cursor="Hand"
-                        Icon="{ui:SymbolIcon color16,
-                                             Filled=False}"
-                        ToolTip="Background Color" />
-                    <ui:Button
-                        x:Name="ClickThrough"
-                        Margin="5,0,0,0"
-                        Background="#FFAAAAAA"
-                        Click="ClickThrough_Click"
-                        Cursor="Hand"
-                        Icon="{ui:SymbolIcon lockClosed16,
-                                             Filled=False}"
-                        ToolTip="Click Through" />
-                </StackPanel>
+
             </Grid>
         </Border>
 

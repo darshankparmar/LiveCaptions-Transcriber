@@ -27,6 +27,12 @@ namespace LiveCaptionsTranscriber
                 IsAutoHeight = true;
                 CheckForFirstUse();
                 CheckForUpdates();
+                
+                // Show overlay window on startup if enabled
+                if (Transcriber.Setting.OverlayWindow.ShowOnStartup)
+                {
+                    ShowOverlayWindow();
+                }
             };
 
             double screenWidth = SystemParameters.PrimaryScreenWidth;
@@ -52,54 +58,77 @@ namespace LiveCaptionsTranscriber
 
         private void OverlayModeButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            var symbolIcon = button?.Icon as SymbolIcon;
-
             if (OverlayWindow == null)
             {
-                symbolIcon.Symbol = SymbolRegular.ClosedCaption24;
-                symbolIcon.Filled = true;
-
-                OverlayWindow = new OverlayWindow();
-                OverlayWindow.SizeChanged +=
-                    (s, e) => WindowHandler.SaveState(OverlayWindow, Transcriber.Setting);
-                OverlayWindow.LocationChanged +=
-                    (s, e) => WindowHandler.SaveState(OverlayWindow, Transcriber.Setting);
-
-                double screenWidth = SystemParameters.PrimaryScreenWidth;
-                double screenHeight = SystemParameters.PrimaryScreenHeight;
-                
-                var windowState = WindowHandler.LoadState(OverlayWindow, Transcriber.Setting);
-                if (windowState.Left <= 0 || windowState.Left >= screenWidth || 
-                    windowState.Top <= 0 || windowState.Top >= screenHeight)
-                {
-                    WindowHandler.RestoreState(OverlayWindow, new Rect(
-                        (screenWidth - 650) / 2, screenHeight * 5 / 6 - 135, 650, 135));
-                }
-                else
-                    WindowHandler.RestoreState(OverlayWindow, windowState);
-                
-                OverlayWindow.Show();
+                ShowOverlayWindow();
             }
             else
             {
+                HideOverlayWindow();
+            }
+        }
+
+        private void ShowOverlayWindow()
+        {
+            if (OverlayWindow != null) return;
+
+            // Update button state if it exists
+            var button = OverlayModeButton as Button;
+            var symbolIcon = button?.Icon as SymbolIcon;
+            if (symbolIcon != null)
+            {
+                symbolIcon.Symbol = SymbolRegular.ClosedCaption24;
+                symbolIcon.Filled = true;
+            }
+
+            OverlayWindow = new OverlayWindow();
+            OverlayWindow.SizeChanged +=
+                (s, e) => WindowHandler.SaveState(OverlayWindow, Transcriber.Setting);
+            OverlayWindow.LocationChanged +=
+                (s, e) => WindowHandler.SaveState(OverlayWindow, Transcriber.Setting);
+
+            double screenWidth = SystemParameters.PrimaryScreenWidth;
+            double screenHeight = SystemParameters.PrimaryScreenHeight;
+            
+            var windowState = WindowHandler.LoadState(OverlayWindow, Transcriber.Setting);
+            if (windowState.Left <= 0 || windowState.Left >= screenWidth || 
+                windowState.Top <= 0 || windowState.Top >= screenHeight)
+            {
+                WindowHandler.RestoreState(OverlayWindow, new Rect(
+                    (screenWidth - 650) / 2, screenHeight * 5 / 6 - 135, 650, 135));
+            }
+            else
+                WindowHandler.RestoreState(OverlayWindow, windowState);
+            
+            OverlayWindow.Show();
+        }
+
+        private void HideOverlayWindow()
+        {
+            if (OverlayWindow == null) return;
+
+            // Update button state if it exists
+            var button = OverlayModeButton as Button;
+            var symbolIcon = button?.Icon as SymbolIcon;
+            if (symbolIcon != null)
+            {
                 symbolIcon.Symbol = SymbolRegular.ClosedCaptionOff24;
                 symbolIcon.Filled = false;
-
-                switch (OverlayWindow.OnlyMode)
-                {
-                    case 1:
-                        OverlayWindow.OnlyMode = 2;
-                        OverlayWindow.OnlyMode = 0;
-                        break;
-                    case 2:
-                        OverlayWindow.OnlyMode = 0;
-                        break;
-                }
-
-                OverlayWindow.Close();
-                OverlayWindow = null;
             }
+
+            switch (OverlayWindow.OnlyMode)
+            {
+                case 1:
+                    OverlayWindow.OnlyMode = 2;
+                    OverlayWindow.OnlyMode = 0;
+                    break;
+                case 2:
+                    OverlayWindow.OnlyMode = 0;
+                    break;
+            }
+
+            OverlayWindow.Close();
+            OverlayWindow = null;
         }
 
 

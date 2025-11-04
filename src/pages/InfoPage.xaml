@@ -15,10 +15,10 @@
                 <Run FontWeight="SemiBold" Text="LiveCaptions Transcriber" />
                 <Run Text="&#x0A;&#x0A;A focused transcription tool that enhances Windows LiveCaptions with better UI, continuous text display, and easy copy/clear functionality." />
                 <Run Text="&#x0A;&#x0A;Perfect for:" />
-                <Run Text="&#x0A;� Meeting notes and lectures" />
-                <Run Text="&#x0A;� Gaming and streaming overlays" />
-                <Run Text="&#x0A;� Accessibility and hearing assistance" />
-                <Run Text="&#x0A;� Content creation and documentation" />
+                <Run Text="&#x0A;📝 Meeting notes and lectures" />
+                <Run Text="&#x0A;🎮 Gaming and streaming overlays" />
+                <Run Text="&#x0A;♿️ Accessibility and hearing assistance" />
+                <Run Text="&#x0A;📚 Content creation and documentation" />
             </TextBlock>
             <Separator Margin="0,10,0,10" />
             <TextBlock Margin="0,0,0,3">
@@ -28,9 +28,9 @@
                 </Hyperlink>
             </TextBlock>
             <TextBlock Margin="0,0,0,3">
-                <Run FontWeight="SemiBold" Text="Original Repository:" />
-                <Hyperlink NavigateUri="https://github.com/SakiRinn/LiveCaptions-Translator" RequestNavigate="Hyperlink_RequestNavigate">
-                    <Run Text="https://github.com/SakiRinn/LiveCaptions-Translator" />
+                <Run FontWeight="SemiBold" Text="Repository:" />
+                <Hyperlink NavigateUri="https://github.com/darshankparmar/LiveCaptions-Transcriber" RequestNavigate="Hyperlink_RequestNavigate">
+                    <Run Text="https://github.com/darshankparmar/LiveCaptions-Transcriber" />
                 </Hyperlink>
             </TextBlock>
             <TextBlock Margin="0,0,0,3">

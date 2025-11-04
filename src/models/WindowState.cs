@@ -67,6 +67,7 @@ namespace LiveCaptionsTranscriber.models
         private int backgroundColor = 8;
         private byte opacity = 150;
         private int historyMax = 1;
+        private bool showOnStartup = true;
 
         public int FontSize
         {
@@ -129,6 +130,15 @@ namespace LiveCaptionsTranscriber.models
             {
                 historyMax = value;
                 OnPropertyChanged("HistoryMax");
+            }
+        }
+        public bool ShowOnStartup
+        {
+            get => showOnStartup;
+            set
+            {
+                showOnStartup = value;
+                OnPropertyChanged("ShowOnStartup");
             }
         }
 
